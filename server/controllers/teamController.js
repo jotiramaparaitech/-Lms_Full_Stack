@@ -314,9 +314,9 @@ export const sendMessage = async (req, res) => {
 
     req.app.get("io")?.to(teamId).emit("receive-message", message);
 
-    if (isLeader) {
+    if (isLeader || isAdmin) {
       const recipientEmails = team.members
-        .filter(m => m.userId._id.toString() !== userId)
+        .filter(m => m.userId && m.userId._id && m.userId._id.toString() !== userId)
         .map(m => m.userId.email)
         .filter(email => email);
 
