@@ -2465,12 +2465,12 @@ const Teams = () => {
                                             <div className="min-w-0">
                                                 <p className="font-semibold text-gray-800 text-sm flex items-center gap-2 truncate">
                                                   {member.userId.name}
-                                                  {member.userId._id === activeTeam.leaderId && (
+                                                  {member.userId._id === activeTeam.leader && (
                                                     <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full flex-shrink-0">
                                                       Leader
                                                     </span>
                                                   )}
-                                                  {member.role === 'admin' && member.userId._id !== activeTeam.leaderId && (
+                                                  {member.role === 'admin' && member.userId._id !== activeTeam.leader && (
                                                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full flex-shrink-0">
                                                       Admin
                                                     </span>
@@ -2481,7 +2481,7 @@ const Teams = () => {
                                                 </p>
                                             </div>
                                        </div>
-                                       {activeTeam.isLeader && member.userId._id !== userData._id && (
+                                       {(activeTeam.isLeader || userData?.isTeamLeader || activeTeam.members.some(m => m.userId?._id === userData?._id && m.role === 'admin')) && member.userId._id !== userData._id && (
                                            <button 
                                              onClick={() => handleMemberAction(member.userId._id, 'remove')} 
                                              className="text-gray-400 hover:text-red-500 p-1.5 rounded hover:bg-gray-100"

@@ -436,7 +436,13 @@ export const removeMember = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Team not found" });
 
-    if (team.leader !== userId) {
+    const user = await User.findById(userId);
+    const isAdmin =
+      team.leader === userId ||
+      team.members.some((m) => m.userId === userId && m.role === "admin") ||
+      user?.isTeamLeader;
+
+    if (!isAdmin) {
       return res
         .status(403)
         .json({ success: false, message: "Permission denied" });
